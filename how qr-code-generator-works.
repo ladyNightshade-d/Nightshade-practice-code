@@ -1,0 +1,78 @@
+Perfect! Let’s make a **simple diagram** to show exactly how your QR generator works — from typing text to downloading the QR.
+
+Here’s a visual flow (text-based diagram for clarity):
+
+```
+┌─────────────┐
+│  User types │
+│  text/URL   │
+└──────┬──────┘
+       │
+       ▼
+┌─────────────┐
+│ Clicks      │
+│ "Generate"  │
+└──────┬──────┘
+       │
+       ▼
+┌─────────────┐
+│ JS function │
+│ generateQR()│
+│  executes   │
+└──────┬──────┘
+       │
+       ▼
+┌─────────────┐
+│ QRCode.js   │
+│ library     │
+│ creates QR  │
+│ image       │
+└──────┬──────┘
+       │
+       ▼
+┌─────────────┐
+│ QR appears  │
+│ in <div>    │
+└──────┬──────┘
+       │
+       ▼
+┌─────────────┐
+│ User clicks │
+│ "Download"  │
+└──────┬──────┘
+       │
+       ▼
+┌─────────────┐
+│ JS function │
+│ downloadQR()│
+│ executes    │
+└──────┬──────┘
+       │
+       ▼
+┌─────────────┐
+│ Creates     │
+│ temporary   │
+│ <a> link    │
+└──────┬──────┘
+       │
+       ▼
+┌─────────────┐
+│ Triggers    │
+│ download of │
+│ QR image    │
+└─────────────┘
+```
+
+---
+
+### 🔹 How to read it
+
+1. **User input** → your program takes it.
+2. **Generate button** → runs `generateQRCode()` function.
+3. **QRCode.js library** → builds the QR image from the input.
+4. **QR shows on page** → `<div>` now has the image.
+5. **Download button** → runs `downloadQRCode()` function.
+6. **JS creates link** → triggers browser download of the QR image.
+
+---
+
