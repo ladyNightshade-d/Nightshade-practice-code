@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cyber Secure Form</title>
+
+<style>
+body {
+    font-family: 'Courier New', monospace;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    color: #00ffcc;
+}
+
+.form-container {
+    background: rgba(0, 0, 20, 0.9);
+    padding: 35px;
+    width: 380px;
+    border-radius: 12px;
+    box-shadow: 0 0 25px rgba(0,255,200,0.3);
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    letter-spacing: 2px;
+}
+
+.form-group {
+    margin-bottom: 18px;
+    position: relative;
+}
+
+label {
+    font-size: 14px;
+    display: block;
+    margin-bottom: 6px;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    background: #0a0f1a;
+    border: 1px solid #00ffcc;
+    border-radius: 6px;
+    color: #00ffcc;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+input:focus {
+    outline: none;
+    box-shadow: 0 0 10px #00ffcc;
+}
+
+.error {
+    color: #ff4d4d;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+.success {
+    color: #00ff99;
+    text-align: center;
+    margin-top: 15px;
+}
+
+.strength {
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.checkmark {
+    position: absolute;
+    right: 10px;
+    top: 38px;
+    color: #00ff99;
+    font-size: 18px;
+    display: none;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 38px;
+    cursor: pointer;
+    font-size: 12px;
+    color: #00ffcc;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background: #00ffcc;
+    border: none;
+    border-radius: 6px;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:disabled {
+    background: gray;
+    cursor: not-allowed;
+}
+
+button:hover:not(:disabled) {
+    background: #00ccaa;
+    box-shadow: 0 0 15px #00ffcc;
+}
+</style>
+</head>
+
+<body>
+
+<div class="form-container">
+    <h2>SECURE ACCESS</h2>
+    <form id="myForm" novalidate>
+
+        <div class="form-group">
+            <label>Username</label>
+            <input type="text" id="name">
+            <div class="error" id="nameError"></div>
+        </div>
+
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="email">
+            <span class="checkmark" id="emailCheck">✔</span>
+            <div class="error" id="emailError"></div>
+        </div>
+
+        <div class="form-group">
+            <label>Phone</label>
+            <input type="text" id="phone">
+            <div class="error" id="phoneError"></div>
+        </div>
+
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="password">
+            <span class="toggle-password" id="togglePassword">SHOW</span>
+            <div class="strength" id="strength"></div>
+            <div class="error" id="passwordError"></div>
+        </div>
+
+        <button type="submit" id="submitBtn" disabled>INITIATE</button>
+        <div class="success" id="successMessage"></div>
+
+    </form>
+</div>
+
+<script>
+const nameInput = document.getElementById("name");
+const emailInput = document.getElementById("email");
+const phoneInput = document.getElementById("phone");
+const passwordInput = document.getElementById("password");
+
+const nameError = document.getElementById("nameError");
+const emailError = document.getElementById("emailError");
+const phoneError = document.getElementById("phoneError");
+const passwordError = document.getElementById("passwordError");
+const strengthText = document.getElementById("strength");
+const successMessage = document.getElementById("successMessage");
+const emailCheck = document.getElementById("emailCheck");
+const submitBtn = document.getElementById("submitBtn");
+const togglePassword = document.getElementById("togglePassword");
+
+function validateName() {
+    if (nameInput.value.trim() === "") {
+        nameError.textContent = "Username required";
+        return false;
+    }
+    nameError.textContent = "";
+    return true;
+}
+
+function validateEmail() {
+    const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+    if (!pattern.test(emailInput.value)) {
+        emailError.textContent = "Invalid email format";
+        emailCheck.style.display = "none";
+        return false;
+    }
+    emailError.textContent = "";
+    emailCheck.style.display = "block";
+    return true;
+}
+
+function validatePhone() {
+    const pattern = /^[0-9]{10}$/;
+    if (!pattern.test(phoneInput.value)) {
+        phoneError.textContent = "Phone must be 10 digits";
+        return false;
+    }
+    phoneError.textContent = "";
+    return true;
+}
+
+function validatePassword() {
+    const password = passwordInput.value;
+
+    if (password.length < 6) {
+        passwordError.textContent = "Minimum 6 characters";
+        strengthText.textContent = "";
+        return false;
+    }
+
+    passwordError.textContent = "";
+
+    if (password.length < 8) {
+        strengthText.textContent = "Weak";
+        strengthText.style.color = "#ff4d4d";
+    } else if (password.match(/[A-Z]/) && password.match(/[0-9]/)) {
+        strengthText.textContent = "Strong";
+        strengthText.style.color = "#00ff99";
+    } else {
+        strengthText.textContent = "Medium";
+        strengthText.style.color = "#ffaa00";
+    }
+
+    return true;
+}
+
+function checkFormValidity() {
+    if (validateName() && validateEmail() && validatePhone() && validatePassword()) {
+        submitBtn.disabled = false;
+    } else {
+        submitBtn.disabled = true;
+    }
+}
+
+nameInput.addEventListener("input", checkFormValidity);
+emailInput.addEventListener("input", checkFormValidity);
+phoneInput.addEventListener("input", checkFormValidity);
+passwordInput.addEventListener("input", checkFormValidity);
+
+togglePassword.addEventListener("click", () => {
+    if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        togglePassword.textContent = "HIDE";
+    } else {
+        passwordInput.type = "password";
+        togglePassword.textContent = "SHOW";
+    }
+});
+
+document.getElementById("myForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    successMessage.textContent = "ACCESS GRANTED ✔";
+    this.reset();
+    submitBtn.disabled = true;
+    emailCheck.style.display = "none";
+    strengthText.textContent = "";
+});
+</script>
+
+</body>
+</html>
